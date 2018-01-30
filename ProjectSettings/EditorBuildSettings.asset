@@ -4,4 +4,7 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Doodle-Jump like/Scenes/main.unity
+    guid: da5668a5b998cdc409c0b02ab6ae51c5

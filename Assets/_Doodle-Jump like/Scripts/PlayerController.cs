@@ -31,7 +31,7 @@ public class PlayerController : DualBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name, other);
+        // Debug.Log(other.name, other);
 
         m_onTriggerCollision.Invoke(other);
 

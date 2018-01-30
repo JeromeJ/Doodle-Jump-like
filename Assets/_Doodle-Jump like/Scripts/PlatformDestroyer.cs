@@ -41,7 +41,7 @@ public class PlatformDestroyer : DualBehaviour
 
     protected void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name, other);
+        // Debug.Log(other.name, other);
 
         if (other.tag == "despawn")
             Seppuku();

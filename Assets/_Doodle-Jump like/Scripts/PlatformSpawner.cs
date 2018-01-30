@@ -12,6 +12,7 @@ public class PlatformSpawner : DualBehaviour
     public float m_difficultyScaling  = 1;
 
     public Camera m_camera;
+    public PlayerController m_player;
 
     public GameObject m_leftWall;
     public GameObject m_rightWall;
@@ -20,7 +21,8 @@ public class PlatformSpawner : DualBehaviour
 
     public List<GameObject> m_platforms = new List<GameObject>();
 
-    private float highestPoint;
+    private float HighestPoint;
+    private float DefaultJump;
 
     #endregion
 
@@ -32,6 +34,8 @@ public class PlatformSpawner : DualBehaviour
 
     private void Start()
     {
+        DefaultJump = m_player.m_jumpSpeed;
+
         for (var i = 0; i < 20; i++)
             Spawn();
     }
@@ -55,14 +59,23 @@ public class PlatformSpawner : DualBehaviour
 
     private void Spawn()
     {
-        highestPoint = Mathf.Clamp(highestPoint + Score / 20, highestPoint + 1, highestPoint + 5);
+        // LVL 1
+        float max = HighestPoint + 5;
+        HighestPoint = Mathf.Clamp(HighestPoint + Score / 20, HighestPoint + 1, max);
+
+        // LVL2
+        if (HighestPoint == max)
+        {
+            Debug.Log("ARGH" + (1 + (Score / 50)));
+            Time.timeScale = 1f + (Score / 50) / 4;
+        }
 
         // Move out into another function
         Vector3 newPos = new Vector3
         {
             x = RandomBetween(m_leftWall.transform.position.x + 1, m_rightWall.transform.position.x - 1),
             //y = RandomBetween(m_despawnZone.transform.position.y, m_spawnZone.transform.position.y)
-            y = highestPoint
+            y = HighestPoint
         };
 
         //newPos.y += Math.Abs(m_despawnZone.transform.position.y - m_spawnZone.transform.position.y);
