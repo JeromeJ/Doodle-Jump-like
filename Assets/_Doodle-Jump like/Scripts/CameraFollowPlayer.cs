@@ -20,6 +20,12 @@ public class CameraFollowPlayer : DualBehaviour
 
     public MovingDirection m_trackMovingDirection  = MovingDirection.UP;
 
+    public float MaxUp
+    {
+        get { return m_maxUp; }
+    }
+
+
     #endregion
 
     #region Public void
