@@ -7,7 +7,8 @@ public class PlayerController : DualBehaviour
 {
     #region Public Members
 
-    public float m_speed = 5f;
+    public float m_movingSpeed = 5f;
+    public float m_jumpSpeed = 5f;
 
     #endregion
 
@@ -22,9 +23,9 @@ public class PlayerController : DualBehaviour
         m_body = GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void Start()
     {
-        
+        Jump();
     }
 
     private void FixedUpdate()
@@ -32,19 +33,32 @@ public class PlayerController : DualBehaviour
         Move();
     }
 
-    private void Move()
+    private void OnTriggerEnter(Collider other)
     {
-        Vector2 m_speedVector;
+        Debug.Log(other.name, other);
 
-        m_speedVector.x = Input.GetAxisRaw("Vertical");
-        m_speedVector.y = Input.GetAxisRaw("Horizontal");
-
-        m_body.velocity = new Vector2(m_speedVector.y, m_speedVector.x) * m_speed;
+        if (other.tag == "platform")
+            Jump();
     }
 
     #endregion
 
     #region Class Methods
+
+    private void Jump()
+    {
+        m_body.velocity = Vector3.zero;
+        m_body.AddForce(Vector3.up * m_jumpSpeed * 100);
+    }
+
+    private void Move()
+    {
+        m_body.velocity = new Vector3(
+            Input.GetAxisRaw("Horizontal") * m_movingSpeed,
+            m_body.velocity.y,
+            m_body.velocity.z
+        );
+    }
 
     #endregion
 
