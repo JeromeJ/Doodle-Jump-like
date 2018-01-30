@@ -51,11 +51,26 @@ public class PlayerController : DualBehaviour
 
     private void Move()
     {
+        //// Bad Practice
+        //m_body.velocity = new Vector3(
+        //    (Input.GetAxisRaw("Horizontal") + Input.acceleration.x) * m_movingSpeed,
+        //    m_body.velocity.y,
+        //    m_body.velocity.z
+        //);
+
+#if UNITY_EDITOR
         m_body.velocity = new Vector3(
             Input.GetAxisRaw("Horizontal") * m_movingSpeed,
             m_body.velocity.y,
             m_body.velocity.z
         );
+#elif UNITY_ANDROID
+        m_body.velocity = new Vector3(
+            Input.acceleration.x * m_movingSpeed,
+            m_body.velocity.y,
+            m_body.velocity.z
+        );
+#endif
     }
 
     #endregion
@@ -68,5 +83,5 @@ public class PlayerController : DualBehaviour
 
     private Rigidbody m_body;
 
-    #endregion
+#endregion
 }
