@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,8 +7,10 @@ public class CameraFollowPlayer : DualBehaviour
 {
     #region Public Members
 
+    public float m_offset = 2f;
+
     public Camera m_camera;
-    public GameObject m_player;
+    public PlayerController m_player;
 
     public enum MovingDirection
     {
@@ -15,7 +18,7 @@ public class CameraFollowPlayer : DualBehaviour
         DOWN = -1
     }
 
-    public MovingDirection m_trackMovingUp  = MovingDirection.UP;
+    public MovingDirection m_trackMovingDirection  = MovingDirection.UP;
 
     #endregion
 
@@ -27,17 +30,39 @@ public class CameraFollowPlayer : DualBehaviour
 
     protected override void Awake()
     {
-        
+        m_maxUp = m_player.transform.position.y;
+        m_maxDown = m_player.transform.position.y;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        
+        TrackMaxima();
+
+        if (m_trackMovingDirection == MovingDirection.UP)
+        {
+            if (m_camera.transform.position.y < m_maxUp)
+                m_camera.transform.position = new Vector3(m_camera.transform.position.x, m_maxUp - m_offset, m_camera.transform.position.z);
+        }
+        else
+        {
+            if (m_camera.transform.position.y > m_maxDown)
+                m_camera.transform.position = new Vector3(m_camera.transform.position.x, m_maxDown + m_offset, m_camera.transform.position.z);
+        }
     }
 
     #endregion
 
     #region Class Methods
+
+    private void TrackMaxima()
+    {
+        float newPos = m_player.transform.position.y;
+
+        if (newPos > m_maxUp)
+            m_maxUp = newPos;
+        else if (newPos < m_maxDown)
+            m_maxDown = newPos;
+    }
 
     #endregion
 
@@ -46,6 +71,9 @@ public class CameraFollowPlayer : DualBehaviour
     #endregion
 
     #region Private and Protected Members
+
+    [SerializeField] private float m_maxUp;
+    [SerializeField] private float m_maxDown;
 
     #endregion
 }

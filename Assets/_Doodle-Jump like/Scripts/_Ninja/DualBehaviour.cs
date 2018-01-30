@@ -93,7 +93,7 @@ public class DualBehaviour : MonoBehaviour
     #region Private and Protected Members
 
     [SerializeField]
-    protected Transform m_transform;
+    public Transform m_transform;
 
     #endregion
 }

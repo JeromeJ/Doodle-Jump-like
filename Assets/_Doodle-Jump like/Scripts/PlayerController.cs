@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : DualBehaviour
 {
@@ -9,6 +7,9 @@ public class PlayerController : DualBehaviour
 
     public float m_movingSpeed = 5f;
     public float m_jumpSpeed = 5f;
+
+    public class OnTriggerCollision : UnityEvent<Collider> { }
+    [HideInInspector] public OnTriggerCollision m_onTriggerCollision = new OnTriggerCollision();
 
     #endregion
 
@@ -23,11 +24,6 @@ public class PlayerController : DualBehaviour
         m_body = GetComponent<Rigidbody>();
     }
 
-    private void Start()
-    {
-        Jump();
-    }
-
     private void FixedUpdate()
     {
         Move();
@@ -36,6 +32,8 @@ public class PlayerController : DualBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log(other.name, other);
+
+        m_onTriggerCollision.Invoke(other);
 
         if (other.tag == "platform")
             Jump();
