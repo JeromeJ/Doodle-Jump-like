@@ -7,6 +7,7 @@ public class GameController : DualBehaviour
 
     public PlayerController m_player;
     public GameObject m_deathZone;
+    public GameObject m_gameOverUI;
 
     #endregion
 
@@ -33,10 +34,19 @@ public class GameController : DualBehaviour
     private void OnTriggerCollision(Collider _other)
     {
         if(_other.gameObject == m_deathZone)
-        {
-            Debug.LogError("GAME OVER");
-            Debug.Break();
-        }
+            GameOver();
+    }
+
+    private void GameOver()
+    {
+        Time.timeScale = 0;
+
+        ShowGameOverUI();
+    }
+
+    private void ShowGameOverUI()
+    {
+        m_gameOverUI.SetActive(true);
     }
 
     #endregion
