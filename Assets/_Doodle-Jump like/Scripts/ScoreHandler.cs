@@ -54,6 +54,10 @@ public class ScoreHandler : DualBehaviour
     private void SaveBestScore()
     {
         File.WriteAllText(m_bestScorePath, "" + m_bestScore);
+
+#if UNITY_WEBGL
+        Application.ExternalEval("FS.syncfs(false, function (err) {})");
+#endif
     }
 
     private void UpdateScoreText(int _score)
@@ -66,8 +70,6 @@ public class ScoreHandler : DualBehaviour
 
     private int GetScore()
     {
-        // TODO: Dirty
-
         return (int)GetComponent<CameraFollowPlayer>().MaxUp;
     }
 
