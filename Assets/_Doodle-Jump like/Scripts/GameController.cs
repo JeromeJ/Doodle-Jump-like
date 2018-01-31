@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Advertisements;
 using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 
@@ -43,15 +44,51 @@ public class GameController : DualBehaviour
 
     private void GameOver()
     {
+        ShowAds();
+
         PauseGame();
 
         ShowGameOverUI();
 
         Analytics.CustomEvent("GaaaameOveeer");
 
-        AnalyticsEvent.GameOver(GetComponent<PlatformSpawner>().Score);
+        // AnalyticsEvent.GameOver(GetComponent<PlatformSpawner>().Score);
 
-        //GetComponent<AnalyticsEventTracker>().TriggerEvent();
+        GetComponent<AnalyticsEventTracker>().TriggerEvent();
+    }
+
+    private void ShowAds()
+    {
+#if UNITY_ANDROID || UNITY_IOS
+        ShowOptions options = new ShowOptions();
+        options.resultCallback = HandleShowResult;
+
+        if (Advertisement.IsReady("video"))
+            Advertisement.Show("video", options);
+        else
+            Debug.LogWarning("Not Ready to show ads");
+    }
+
+    void HandleShowResult(ShowResult result)
+    {
+        if (result == ShowResult.Finished)
+        {
+            Debug.Log("Video completed - Offer a reward to the player");
+            // Reward your player here.
+
+        }
+        else if (result == ShowResult.Skipped)
+        {
+            Debug.LogWarning("Video was skipped - Do NOT reward the player");
+
+        }
+        else if (result == ShowResult.Failed)
+        {
+            Debug.LogError("Video failed to show");
+        }
+#else
+        Debug.LogWarning("Can't display ads! Not on a phone!");
+#endif
     }
 
     private void PauseGame()
@@ -90,13 +127,13 @@ public class GameController : DualBehaviour
 #endif
     }
 
-    #endregion
+#endregion
 
-    #region Tools Debug and Utility
+#region Tools Debug and Utility
 
-    #endregion
+#endregion
 
-    #region Private and Protected Members
+#region Private and Protected Members
 
-    #endregion
+#endregion
 }
