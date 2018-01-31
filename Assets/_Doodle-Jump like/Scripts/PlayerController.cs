@@ -58,7 +58,7 @@ public class PlayerController : DualBehaviour
         //    m_body.velocity.z
         //);
 
-#if UNITY_EDITOR || UNITY_WEBGL
+#if UNITY_EDITOR || UNITY_WEBGL || UNITY_STANDALONE
         m_body.velocity = new Vector3(
             Input.GetAxisRaw("Horizontal") * m_movingSpeed,
             m_body.velocity.y,

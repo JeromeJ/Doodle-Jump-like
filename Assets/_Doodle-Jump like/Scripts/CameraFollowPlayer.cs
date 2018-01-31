@@ -7,8 +7,6 @@ public class CameraFollowPlayer : DualBehaviour
 {
     #region Public Members
 
-    public float m_offset = 2f;
-
     public Camera m_camera;
     public PlayerController m_player;
 
@@ -38,6 +36,8 @@ public class CameraFollowPlayer : DualBehaviour
     {
         m_maxUp = m_player.transform.position.y;
         m_maxDown = m_player.transform.position.y;
+
+        m_offset = m_camera.transform.position.y - m_player.transform.position.y;
     }
 
     private void FixedUpdate()
@@ -80,6 +80,8 @@ public class CameraFollowPlayer : DualBehaviour
 
     [SerializeField] private float m_maxUp;
     [SerializeField] private float m_maxDown;
+
+    [SerializeField] private float m_offset;
 
     #endregion
 }

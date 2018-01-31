@@ -43,9 +43,6 @@ public class PlatformSpawner : DualBehaviour
     protected void FixedUpdate()
     {
         int desiredNumberOfPlatform = GetDesiredNumberOfPlatforms();
-
-        //while (m_platforms.Count < desiredNumberOfPlatform)
-        //    Spawn();
     }
 
     private int GetDesiredNumberOfPlatforms()
