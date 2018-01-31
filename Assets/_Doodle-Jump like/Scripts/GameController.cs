@@ -22,6 +22,10 @@ public class GameController : DualBehaviour
     {
         m_player.m_onTriggerCollision.AddListener(OnTriggerCollision);
         DontDestroyOnLoad(GameObject.Find("Directional Light"));
+
+#if UNITY_ANDROID
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+#endif
     }
 
     private void Update()
@@ -43,6 +47,10 @@ public class GameController : DualBehaviour
     {
         Time.timeScale = 0;
 
+#if UNITY_ANDROID
+        Screen.sleepTimeout = SleepTimeout.SystemSetting;
+#endif
+
         ShowGameOverUI();
     }
 
@@ -54,6 +62,10 @@ public class GameController : DualBehaviour
     public void RestartGame()
     {
         Time.timeScale = 1;
+#if UNITY_ANDROID
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+#endif
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

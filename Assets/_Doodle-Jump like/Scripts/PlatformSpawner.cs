@@ -88,15 +88,23 @@ public class PlatformSpawner : DualBehaviour
 
         // newPlatform.GetComponent<PlatformDestroyer>().m_despawnZone = m_despawnZone;
         newPlatform.GetComponent<PlatformDestroyer>().onDestroy.AddListener(ClearUpDestroyedPlatforms);
+        newPlatform.GetComponent<PlatformDestroyer>().onDestroy.AddListener(Spawn);
 
         m_platforms.Add(newPlatform);
+    }
+
+    /// <summary>
+    /// Called upon an event
+    /// </summary>
+    /// <param name="arg0"></param>
+    private void Spawn(GameObject arg0)
+    {
+        Spawn();
     }
 
     private void ClearUpDestroyedPlatforms(GameObject platform)
     {
         m_platforms.Remove(platform);
-
-        Spawn();
     }
 
     #endregion
