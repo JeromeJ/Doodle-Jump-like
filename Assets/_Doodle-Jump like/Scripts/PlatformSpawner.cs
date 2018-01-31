@@ -66,8 +66,11 @@ public class PlatformSpawner : DualBehaviour
         // LVL2
         if (HighestPoint == max)
         {
-            Debug.Log("ARGH" + (1 + (Score / 50)));
-            Time.timeScale = 1f + (Score / 50) / 4;
+            float newGameSpeed = 1f + (Score / 50f) / 4f;
+            
+            Time.timeScale = newGameSpeed;
+
+            Debug.Log("Game speed: " + newGameSpeed);
         }
 
         // Move out into another function
