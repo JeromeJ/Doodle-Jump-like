@@ -22,7 +22,6 @@ public class PlatformSpawner : DualBehaviour
     public List<GameObject> m_platforms = new List<GameObject>();
 
     private float HighestPoint;
-    private float DefaultJump;
 
     #endregion
 
@@ -34,20 +33,8 @@ public class PlatformSpawner : DualBehaviour
 
     private void Start()
     {
-        DefaultJump = m_player.m_jumpSpeed;
-
         for (var i = 0; i < 20; i++)
             Spawn();
-    }
-
-    protected void FixedUpdate()
-    {
-        int desiredNumberOfPlatform = GetDesiredNumberOfPlatforms();
-    }
-
-    private int GetDesiredNumberOfPlatforms()
-    {
-        return (int)(42 - Score/10);
     }
 
     static Random rnd = new Random();

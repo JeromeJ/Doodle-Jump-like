@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.Analytics;
@@ -23,9 +24,6 @@ public class GameController : DualBehaviour
     protected override void Awake()
     {
         m_player.m_onTriggerCollision.AddListener(CheckForGameOver);
-
-        // Prevents a lightning bug when reloading the scene
-        DontDestroyOnLoad(GameObject.Find("Directional Light"));
 
 #if UNITY_ANDROID
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
@@ -60,10 +58,14 @@ public class GameController : DualBehaviour
     private void ShowAds()
     {
 #if UNITY_ANDROID || UNITY_IOS
-        ShowOptions options = new ShowOptions();
-        options.resultCallback = HandleShowResult;
+        ShowOptions options = new ShowOptions { resultCallback = HandleShowResult };
+
+#if UNITY_EDITOR
+        // StartCoroutine(WaitForAd());
+#endif
 
         if (Advertisement.IsReady("video"))
+            // Doesn't pause the game in the Editor /!\
             Advertisement.Show("video", options);
         else
             Debug.LogWarning("Not Ready to show ads");
@@ -74,21 +76,28 @@ public class GameController : DualBehaviour
         if (result == ShowResult.Finished)
         {
             Debug.Log("Video completed - Offer a reward to the player");
-            // Reward your player here.
 
+            // Reward your player here.
         }
         else if (result == ShowResult.Skipped)
-        {
             Debug.LogWarning("Video was skipped - Do NOT reward the player");
-
-        }
         else if (result == ShowResult.Failed)
-        {
             Debug.LogError("Video failed to show");
-        }
 #else
         Debug.LogWarning("Can't display ads! Not on a phone!");
 #endif
+    }
+
+    IEnumerator WaitForAd()
+    {
+        float currentTimeScale = Time.timeScale;
+        Time.timeScale = 0f;
+        yield return null;
+
+        while (Advertisement.isShowing)
+            yield return null;
+
+        Time.timeScale = currentTimeScale;
     }
 
     private void PauseGame()
@@ -115,6 +124,9 @@ public class GameController : DualBehaviour
 
     private void ReloadScene()
     {
+        // Prevents a lightning bug when reloading the scene
+        DontDestroyOnLoad(GameObject.Find("Directional Light"));
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
